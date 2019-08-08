@@ -4,7 +4,6 @@ import warnings
 
 from tqdm import tqdm
 import astroalign
-import sep
 import cv2
 import numpy as np
 

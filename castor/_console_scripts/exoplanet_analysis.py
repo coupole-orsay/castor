@@ -1,18 +1,11 @@
 #! /usr/bin/env python3
 
 import argparse
-import datetime
 import os
-import re
-import warnings
 
-from astropy.io import fits
 from tqdm import tqdm
-import cv2
-import dateutil.parser
 import numpy as np
 import papy
-import sep
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
