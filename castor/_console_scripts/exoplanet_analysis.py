@@ -5,7 +5,6 @@ import os
 
 from tqdm import tqdm
 import numpy as np
-import papy
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -390,6 +389,54 @@ def running_average_kernel(name, width):
         }
     return kernels[name]
 
+@np.vectorize
+def total_seconds(timedelta):
+    ''' Vectorised version of timedelta.total_seconds() '''
+    return timedelta.total_seconds()
+
+def weighted_running_average(arr, weight_func, x=None):
+    ''' Compute a running average on arr, weighting the contribution of each
+    term with weight-function.
+
+    Parameters
+    ==========
+    arr : np.ndarray(ndim=1)
+        Array of values on which to compute the running average.
+    weight_func : function
+        A function which takes a distance as input, and returns a weight.
+        Weights don't have to be normalised.
+    x : np.ndarray or None (default: None)
+        If x is an array, use it to compute the distances before they are
+        passed to weight_func. This allows to compute a running average on
+        non-regularly sampled data.
+
+    Returns
+    =======
+    ret : np.ndarray
+        An array of the same shape as the input arr, equivalent to:
+        - when x is None:
+            $ret_i = \sum_{j=-n}^n arr_{i+j} × w(j) / (2n+1)$
+        - when x is specified:
+            $ret_i = \sum_{j=-n}^n arr_{i+j} × w(|x_i - x_{i+j}|) / (2n+1)$.
+    '''
+    n = len(arr)
+    if x is None:
+        x = np.arange(n)
+
+    distances = x.repeat(n).reshape(-1, n).T
+    distances = np.abs(np.array([d - d[i] for i, d in enumerate(distances)]))
+    weights = np.vectorize(weight_func)(distances)
+    norm = n / weights.sum(axis=1).repeat(n).reshape(-1, n)
+    weights *= norm
+
+    ret = arr.copy()
+    ret = arr.repeat(n).reshape(-1, n).T
+    ret *= weights
+    ret = np.mean(ret, axis=1)
+
+    return ret
+
+
 def main():
     args = get_parsed_args()
 
@@ -491,14 +538,14 @@ def main():
     # relative times
     t_abs = timestamps
     t_ref = t_abs[0]
-    t_rel = papy.time.total_seconds(t_abs - t_ref)
+    t_rel = total_seconds(t_abs - t_ref)
     t_unit = 's'
 
     # apply a running average to the data
     kernel = running_average_kernel(args.running_average,
                                     args.running_average_width)
     if kernel is not None:
-        rel_intensity_exo = papy.num.weighted_running_average(
+        rel_intensity_exo = weighted_running_average(
             rel_intensity_exo, kernel, x=t_rel)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
