@@ -1,0 +1,46 @@
+telescopes:
+  c14:
+    full name: Celestron C 14
+    focale length: 3910 mm
+    aperture: 355.6 mm
+
+cameras:
+  atik:
+    full name: Atik One 9.0
+    pixel count: [3380, 2704]
+    pixel size: [3.69 µm, 3.69 µm]
+    detector size: [12.47 mm, 9.98 mm]
+    adc bits: 16
+  sbig:
+    full name: SBIG ST 2000 XM
+    pixel count: [1600, 1200]
+    pixel size: [7.4 µm, 7.4 µm]
+    detector size: [11.84 mm, 8.88 mm]
+    adc bits: 14
+  inova:
+    full name: iNova PLB-C2
+    sensor: Sony HAD ICX204AK
+    pixel count: [1024, 768]
+    pixel size: [4.65 µm, 4.65 µm]
+    detector size: [4.76 mm, 3.57 mm]
+    adc bits: 10/12
+    url: http://inovaccdusa.com/front-page-php/color-cameras/plb-c2/
+  qhy:
+    full name: QHY5L-II
+    pixel count: [1280, 960]
+    pixel size: [3.75 µm, 3.75 µm]
+    detector size: [4.8 mm, 3.6 mm]
+    adc bits: "10/14 bits, sortie en 8 bits"
+
+spectrometers:
+  lhires:
+    full name: LHIRES III
+    slits sizes:
+      - 15 µm
+      - 19 µm
+      - 23 µm
+      - 35 µm
+    gratings:
+      - 150 mm⁻¹
+      - 300 mm⁻¹
+      - 1200 mm⁻¹
