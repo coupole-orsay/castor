@@ -13,7 +13,7 @@ import numpy as np
 import skimage.transform as skt
 import yaml
 
-from . import tools
+from castor import files_handling, preparation, alignment, photometry
 
 def get_parsed_args():
     ''' Script argument parser '''
@@ -51,7 +51,7 @@ def get_parsed_args():
     if args.track_path is None:
         args.track_path = os.path.join(args.name, 'track')
     if args.sample_track_fits is None:
-        track_files = tools.list_fits(args.track_path)
+        track_files = files_handling.list_fits(args.track_path)
         if not track_files:
             raise ValueError('No track files found!')
         args.sample_track_fits = track_files[0]
@@ -81,7 +81,7 @@ def main():
     print(args.track_path, args.sample_track_fits)
 
     # Instruments properties
-    with open(tools.get_resource('instruments.yml')) as f:
+    with open(files_handling.get_package_data('instruments.yml')) as f:
         instruments = yaml.load(f)
     focale = u.Quantity(instruments['telescopes']['c14']['focale length'])
     px_size = instruments['cameras']['atik']['pixel size']
@@ -96,8 +96,8 @@ def main():
 
     # Open data
     cube_path = os.path.join(args.output_path, 'cube.fits')
-    images, timestamps = tools.open_or_compute(
-        cube_path, tools.reduction,
+    images, timestamps = files_handling.open_or_compute(
+        cube_path, preparation.prepare,
         args.track_path, args.track_dark_path,
         args.flat_path, args.flat_dark_path,
         # save=False,
@@ -107,12 +107,12 @@ def main():
 
     # Align using a reference image
     ref_img = images[0]
-    ref_sources = tools.sep_sources_coordinates(ref_img, threshold=args.sep_threshold)
+    ref_sources = photometry.sep_sources_coordinates(ref_img, threshold=args.sep_threshold)
     iterable = tqdm(images, desc='Aligning images', total=len(images))
     transforms = []
     for i, img in enumerate(iterable):
         try:
-            sources = tools.sep_sources_coordinates(img, threshold=args.sep_threshold)
+            sources = photometry.sep_sources_coordinates(img, threshold=args.sep_threshold)
             p, _ = astroalign.find_transform(sources, ref_sources)
         except Exception as e:
             warnings.warn('Image {}: {}'.format(i, e))

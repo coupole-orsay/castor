@@ -8,7 +8,6 @@ import warnings
 
 from astropy.io import fits
 from tqdm import tqdm
-import astroalign
 import cv2
 import dateutil.parser
 import numpy as np
@@ -19,7 +18,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 plt.ioff()
 
-from . import tools
+from castor import files_handling, preparation, alignment, photometry
 
 def get_parsed_args():
     parser = argparse.ArgumentParser(
@@ -416,26 +415,26 @@ def main():
     cube_path = os.path.join(args.output_path, 'cube.fits')
     aligned_cube_path = os.path.join(args.output_path, 'cube_aligned.fits')
     # -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
-    ## This section is optimize to use only a little more memory than the
+    ## This section is optimized to use only a little more memory than the
     ## size of `images`. It is equivalent to:
     #   images, timestamps = open_or_compute(
     #       cube_path reduction,
     #       args.sci_path, args.sci_dark_path,
     #       args.flat_path, args.flat_dark_path)
     #   images, timestamps = open_or_compute(
-    #       aligned_cube_path, register_stars,
+    #       aligned_cube_path, alignment.register_stars,
     #       images, timestamps)
     if os.path.exists(aligned_cube_path):
-        images, timestamps = tools.load_fits_data(
+        images, timestamps = files_handling.load_fits_data(
             aligned_cube_path, norm_to_exptime=False, timestamps_hdu=1)
     else:
-        images, timestamps = tools.open_or_compute(
-            cube_path, tools.reduction,
+        images, timestamps = files_handling.open_or_compute(
+            cube_path, preparation.prepare,
             args.sci_path, args.sci_dark_path,
             args.flat_path, args.flat_dark_path,
             )
-        images, timestamps = tools.open_or_compute(
-            aligned_cube_path, tools.register_stars,
+        images, timestamps = files_handling.open_or_compute(
+            aligned_cube_path, alignment.register_stars,
             images, timestamps)
     # -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 
@@ -474,11 +473,11 @@ def main():
         n_stars = len(coordinates)
         n_images = len(images)
         distances = np.ndarray((n_images, n_stars))
-        sample_sources = tools.sep_extract(images[0], threshold=args.sep_threshold)
+        sample_sources = photometry.sep_extract(images[0], threshold=args.sep_threshold)
         all_sources = np.ndarray((n_images, n_stars), dtype=sample_sources.dtype)
         for i, im in enumerate(tqdm(images, desc='Photometry')):
-            sources = tools.sep_extract(im, threshold=args.sep_threshold)
-            sources, dist = tools.find_closest_sources(sources, coordinates)
+            sources = photometry.sep_extract(im, threshold=args.sep_threshold)
+            sources, dist = photometry.find_closest_sources(sources, coordinates)
             distances[i, :] = dist
             all_sources[i, :] = sources
 
