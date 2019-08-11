@@ -47,7 +47,21 @@ def get_parsed_args():
         '--running-average-width', type=float, default=60,
         help=('Time width of the running average, in seconds. '
               'Default: 60 '))
-    return parser.parse_args()
+
+    args = parser.parse_args()
+
+    if args.sci_path is None:
+        args.sci_path = os.path.join(args.name, 'sci')
+    if args.flat_path is None:
+        args.flat_path = os.path.join(args.name, 'flat')
+    if args.sci_dark_path is None:
+        args.sci_dark_path = os.path.join(args.name, 'sci_dark')
+    if args.flat_dark_path is None:
+        args.flat_dark_path = os.path.join(args.name, 'flat_dark')
+    if args.output_path is None:
+        args.output_path = args.name
+
+    return args
 
 # Plot tools
 
@@ -439,17 +453,6 @@ def weighted_running_average(arr, weight_func, x=None):
 
 def main():
     args = get_parsed_args()
-
-    if args.sci_path is None:
-        args.sci_path = os.path.join(args.name, 'sci')
-    if args.flat_path is None:
-        args.flat_path = os.path.join(args.name, 'flat')
-    if args.sci_dark_path is None:
-        args.sci_dark_path = os.path.join(args.name, 'sci_dark')
-    if args.flat_dark_path is None:
-        args.flat_dark_path = os.path.join(args.name, 'flat_dark')
-    if args.output_path is None:
-        args.output_path = args.name
 
     # data reduction and image alignment --------------------------------------
     cube_path = os.path.join(args.output_path, 'cube.fits')
