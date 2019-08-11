@@ -3,6 +3,8 @@
 import argparse
 import os
 
+from astropy.io import fits
+
 from castor import files_handling, alignment
 
 def get_parsed_args():
@@ -22,6 +24,9 @@ def get_parsed_args():
     parser.add_argument(
         '-O', '--overwrite', action='store_true',
         help='Overwrite output if it already exists.')
+    parser.add_argument(
+        '--hdu', type=int, default=0,
+        help='HDU containing the cube to align. Default: 0')
 
     args = parser.parse_args()
 
@@ -44,12 +49,13 @@ def main():
         msg = "output file '{}' exists, use -O to overwrite it"
         raise OSError(msg.format(args.output))
 
-    images, timestamps = files_handling.load_fits_data(
-        args.input, norm_to_exptime=False, timestamps_hdu=1)
-    files_handling.compute_and_save(
-        args.output,
-        files_handling.pass_timestamps(alignment.register_stars),
-        images, timestamps, overwrite=args.overwrite)
+    hdulist = fits.open(args.input)
+    images = hdulist[args.hdu].data
+
+    aligned_images = alignment.register_stars(images)
+
+    hdulist[args.hdu].data = aligned_images
+    hdulist.writeto(args.output, overwrite=args.overwrite)
 
 if __name__ == '__main__':
     main()
