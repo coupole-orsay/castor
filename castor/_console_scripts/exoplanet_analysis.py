@@ -455,7 +455,7 @@ def main():
     args = get_parsed_args()
 
     # data reduction and image alignment --------------------------------------
-    cube_path = os.path.join(args.output_path, 'cube.fits')
+    cube_path = os.path.join(args.output_path, 'cube_prepared.fits')
     aligned_cube_path = os.path.join(args.output_path, 'cube_aligned.fits')
     # -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
     ## This section is optimized to use only a little more memory than the

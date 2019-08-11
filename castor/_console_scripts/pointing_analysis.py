@@ -94,7 +94,7 @@ def main():
     px_angular_size = np.arctan(binned_px_size / focale).to('arcsec')
 
     # Open data
-    cube_path = os.path.join(args.output_path, 'cube.fits')
+    cube_path = os.path.join(args.output_path, 'cube_prepared.fits')
     images, timestamps = files_handling.open_or_compute(
         cube_path, preparation.prepare,
         args.track_path, args.track_dark_path,
