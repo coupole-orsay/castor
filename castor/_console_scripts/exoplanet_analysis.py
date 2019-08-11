@@ -465,7 +465,8 @@ def main():
     #       args.sci_path, args.sci_dark_path,
     #       args.flat_path, args.flat_dark_path)
     #   images, timestamps = open_or_compute(
-    #       aligned_cube_path, alignment.register_stars,
+    #       aligned_cube_path,
+    #       files_handling.pass_timestamps(alignment.register_stars),
     #       images, timestamps)
     if os.path.exists(aligned_cube_path):
         images, timestamps = files_handling.load_fits_data(
@@ -477,7 +478,8 @@ def main():
             args.flat_path, args.flat_dark_path,
             )
         images, timestamps = files_handling.open_or_compute(
-            aligned_cube_path, alignment.register_stars,
+            aligned_cube_path,
+            files_handling.pass_timestamps(alignment.register_stars),
             images, timestamps)
     # -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
 

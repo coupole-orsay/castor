@@ -18,7 +18,7 @@ def affine_transform(img, mat):
     img_transformed = img_transformed * (img_max - img_min) + img_min
     return img_transformed
 
-def register_stars(images, timestamps, ref_img=None):
+def register_stars(images, ref_img=None):
     ''' Register a field of stars in translation, rotation, and scaling.
 
     Parameters
@@ -56,4 +56,4 @@ def register_stars(images, timestamps, ref_img=None):
             mat = np.array([[1, 0, 0], [0, 1, 0]], dtype=float)
         images[i] = affine_transform(img, mat)
 
-    return images, timestamps
+    return images

@@ -47,7 +47,8 @@ def main():
     images, timestamps = files_handling.load_fits_data(
         args.input, norm_to_exptime=False, timestamps_hdu=1)
     files_handling.compute_and_save(
-        args.output, alignment.register_stars,
+        args.output,
+        files_handling.pass_timestamps(alignment.register_stars),
         images, timestamps, overwrite=args.overwrite)
 
 if __name__ == '__main__':

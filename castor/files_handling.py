@@ -56,6 +56,21 @@ def get_timestamps(filenames, hdu=0):
     timestamps = [dateutil.parser.parse(h['DATE-OBS']) for h in headers]
     return np.array(timestamps)
 
+def pass_timestamps(func):
+    ''' Decorator to make a function transparently pass timestamps
+
+    Used to make functions that don't use timestamps (eg.
+    alignment.register_stars) work with open_or_compute.
+
+    transforms:
+        ret = func(a, b, ..., c=foo, d=bar)
+    into:
+        ret, timestamps = func(a, timestamps, b, ..., c=foo, d=bar)
+    '''
+    def func_that_passes_timestamps(a, timestamps, *args, **kwargs):
+        return func(a, *args, **kwargs), timestamps
+    return func_that_passes_timestamps
+
 def compute_and_save(filename, function, *args, overwrite=False, **kwargs):
     data, timestamps = function(*args, **kwargs)
     save_fits(data, filename, timestamps=timestamps, overwrite=overwrite)
