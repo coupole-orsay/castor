@@ -52,7 +52,7 @@ def get_parsed_args():
     if args.sample_track_fits is None:
         track_files = files_handling.list_fits(args.track_path)
         if not track_files:
-            raise ValueError('No track files found!')
+            raise ValueError('No track files found in ' + args.track_path)
         args.sample_track_fits = track_files[0]
         print(args.sample_track_fits)
     if args.flat_path is None:
