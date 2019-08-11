@@ -56,6 +56,10 @@ def get_timestamps(filenames, hdu=0):
     timestamps = [dateutil.parser.parse(h['DATE-OBS']) for h in headers]
     return np.array(timestamps)
 
+def compute_and_save(filename, function, *args, overwrite=False, **kwargs):
+    data, timestamps = function(*args, **kwargs)
+    save_fits(data, filename, timestamps=timestamps, overwrite=overwrite)
+
 def open_or_compute(filename, function, *args, save=True, **kwargs):
     ''' If filename exists, open it; if it doesn't, compute it using
     function(*args, **kwargs) and save it to filename. '''
