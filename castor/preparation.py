@@ -29,14 +29,17 @@ def create_master(filenames, default=None, dtype=FLOAT_DTYPE):
     if type(filenames) is str:
         fits_path = filenames
         filenames = files_handling.list_fits(fits_path)
+        empty_name = fits_path
+    else:
+        empty_name = filenames
     if not filenames:
         if default is not None:
             msg = '{} is empty, using default value {}'
-            msg = msg.format(filenames, default)
+            msg = msg.format(empty_name, default)
             warnings.warn(msg)
             return default
         else:
-            raise ValueError('{} is empty'.format(filenames))
+            raise ValueError('{} is empty'.format(empty_name))
     master = np.zeros_like(files_handling.load_fits_data(filenames[0]))
     for filename in filenames:
         master += files_handling.load_fits_data(filename)
