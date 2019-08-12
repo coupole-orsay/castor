@@ -9,8 +9,6 @@ from tqdm import tqdm
 import dateutil.parser
 import numpy as np
 
-FLOAT_DTYPE = np.float32
-
 def get_package_data(path):
     package_root = os.path.abspath(os.path.dirname(__file__))
     return os.path.join(package_root, 'data', path)
@@ -38,7 +36,7 @@ def load_fits_headers(filenames, hdu=0):
     return headers
 
 def load_fits_data(path, hdu=0, timestamps_hdu=None,
-        norm_to_exptime=True, norm_dtype=FLOAT_DTYPE):
+        norm_to_exptime=True, norm_dtype=np.float32):
     f = fits.open(path)
     data = f[hdu].data
     if norm_to_exptime:

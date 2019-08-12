@@ -7,9 +7,7 @@ import numpy as np
 
 from . import files_handling
 
-FLOAT_DTYPE = np.float32
-
-def create_master(filenames, default=None, dtype=FLOAT_DTYPE):
+def create_master(filenames, default=None):
     ''' Create a master dark or a master flat.
 
     Parameters
