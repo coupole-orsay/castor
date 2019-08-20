@@ -35,12 +35,22 @@ def get_parsed_args():
         help='Directory containing the flat dark FITS. Default: {name}/flat_dark')
     parser.add_argument(
         '--output-path', type=str,
-        help='Directory where output files are saved. Default: {name}/')
+        help='Directory where output files are saved. Default: {name}/')
+    parser.add_argument(
+        '--telescope', type=str, default='c14',
+        help='Telescope name (in instruments.yml). Default: c14')
+    parser.add_argument(
+        '--camera', type=str, default='atik',
+        help='Telescope name (in instruments.yml). Default: atik')
     parser.add_argument(
         '--sep-threshold', type=float, default=20,
         help=('Source extraction threshold, passed to sep.extract(). '
               'https://sep.readthedocs.io/en/latest/api/sep.extract.html '
               'Default: 20'))
+    parser.add_argument(
+        '--ref-image', type=int, default=0,
+        help=('Indice of the image used as a reference to determine '
+              'the pointing variations. Default: 0'))
 
     args = parser.parse_args()
 
@@ -77,8 +87,8 @@ def main():
     # Instruments properties
     with open(files_handling.get_package_data('instruments.yml')) as f:
         instruments = yaml.load(f)
-    focale = u.Quantity(instruments['telescopes']['c14']['focale length'])
-    px_size = instruments['cameras']['atik']['pixel size']
+    focale = u.Quantity(instruments['telescopes'][args.telescope]['focale length'])
+    px_size = instruments['cameras'][args.camera]['pixel size']
     px_size = u.Quantity([u.Quantity(s.replace('µm', 'um')) for s in px_size])
 
     # Data properties
@@ -100,7 +110,7 @@ def main():
     # Align images ------------------------------------------------------------
 
     # Align using a reference image
-    ref_img = images[0]
+    ref_img = images[args.ref_image]
     ref_sources = photometry.sep_sources_coordinates(ref_img, threshold=args.sep_threshold)
     if len(ref_sources) < 3:
         raise Exception('Reference stars in target image are less than the '
