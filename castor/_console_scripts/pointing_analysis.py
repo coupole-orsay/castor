@@ -105,6 +105,9 @@ def main():
     # Align using a reference image
     ref_img = images[0]
     ref_sources = photometry.sep_sources_coordinates(ref_img, threshold=args.sep_threshold)
+    if len(ref_sources) < 3:
+        raise Exception('Reference stars in target image are less than the '
+                        'minimum value (3).')
     iterable = tqdm(images, desc='Aligning images', total=len(images))
     transforms = []
     for i, img in enumerate(iterable):
