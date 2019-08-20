@@ -43,10 +43,10 @@ def get_parsed_args():
         '--camera', type=str, default='atik',
         help='Telescope name (in instruments.yml). Default: atik')
     parser.add_argument(
-        '--sep-threshold', type=float, default=20,
+        '--sep-threshold', type=float, default=5,
         help=('Source extraction threshold, passed to sep.extract(). '
               'https://sep.readthedocs.io/en/latest/api/sep.extract.html '
-              'Default: 20'))
+              'Default: 5'))
     parser.add_argument(
         '--ref-image', type=int, default=0,
         help=('Indice of the image used as a reference to determine '
