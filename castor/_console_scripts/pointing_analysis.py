@@ -25,9 +25,6 @@ def get_parsed_args():
         '--track-path', type=str,
         help='Directory containing the tracking FITS. Default: {name}/track')
     parser.add_argument(
-        '--sample-track-fits', type=str,
-        help='Sample track FITS within the track path. Default: first FITS in the track path.')
-    parser.add_argument(
         '--track-dark-path', type=str,
         help='Directory containing the tracking dark FITS. Default: {name}/track_dark')
     parser.add_argument(
@@ -49,11 +46,6 @@ def get_parsed_args():
 
     if args.track_path is None:
         args.track_path = os.path.join(args.name, 'track')
-    if args.sample_track_fits is None:
-        track_files = files_handling.list_fits(args.track_path)
-        if not track_files:
-            raise ValueError('No track files found in ' + args.track_path)
-        args.sample_track_fits = track_files[0]
     if args.flat_path is None:
         args.flat_path = os.path.join(args.name, 'flat')
     if args.track_dark_path is None:
@@ -62,6 +54,11 @@ def get_parsed_args():
         args.flat_dark_path = os.path.join(args.name, 'flat_dark')
     if args.output_path is None:
         args.output_path = args.name
+
+    track_files = files_handling.list_fits(args.track_path)
+    if not track_files:
+        raise ValueError('No track files found in ' + args.track_path)
+    args.sample_track_fits = track_files[0]
 
     return args
 
