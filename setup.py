@@ -7,10 +7,10 @@ with open('requirements.txt', 'r') as f:
 
 entry_points = {
     'console_scripts': [
-        'castor_exoplanet_analysis = castor._console_tools.exoplanet_analysis:main',
-        'castor_pointing_analysis = castor._console_tools.pointing_analysis:main',
-        'castor_prepare = castor._console_tools.prepare:main',
-        'castor_align = castor._console_tools.align:main',
+        'castor_align = castor._console_scripts.align:main',
+        'castor_exoplanet_analysis = castor._console_scripts.exoplanet_analysis:main',
+        'castor_pointing_analysis = castor._console_scripts.pointing_analysis:main',
+        'castor_prepare = castor._console_scripts.prepare:main',
         ]
     }
 
