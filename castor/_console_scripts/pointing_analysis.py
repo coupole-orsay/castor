@@ -54,7 +54,6 @@ def get_parsed_args():
         if not track_files:
             raise ValueError('No track files found in ' + args.track_path)
         args.sample_track_fits = track_files[0]
-        print(args.sample_track_fits)
     if args.flat_path is None:
         args.flat_path = os.path.join(args.name, 'flat')
     if args.track_dark_path is None:
@@ -77,7 +76,6 @@ def find_transform(sources_1, sources_2):
 
 def main():
     args = get_parsed_args()
-    print(args.track_path, args.sample_track_fits)
 
     # Instruments properties
     with open(files_handling.get_package_data('instruments.yml')) as f:
