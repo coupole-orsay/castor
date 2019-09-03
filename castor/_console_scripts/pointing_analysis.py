@@ -176,11 +176,11 @@ def main():
     fit_segments = [
         ('X', tx,
             lambda t, a, b, A, T, φ: a*t + b + A*np.sin(2*np.pi*t/T+φ),
-            'X(t) = {:.2f} t + {:.2f} + {:.2f} sin(2 π t / {:.4f} + {:.2f})',
-            (1, 0, 1, .083, 0)),
+            'X(t) = {:.2f} t + {:.1f} + {:.2f} sin(2πt / {:.4f} + {:.1f})',
+            (1, 0, 1, .08, 0)),
         ('Y', ty,
             lambda t, a, b: a*t + b,
-            'Y(t) = {:.2f} t + {:.2f}',
+            'Y(t) = {:.2f} t + {:.1f}',
             None),
         ]
     popts, pcovs = [], []
@@ -192,7 +192,6 @@ def main():
         popts.append(popt)
         pcovs.append(pcov)
         equation = expr.format(*popt)
-        print(equation)
         plt.plot(
             rel_time, fit_ydata,
             label=equation,
@@ -201,6 +200,11 @@ def main():
             fit_xdata[m], func(fit_xdata, *popt)[m],
             color='#808080',
             )
+        print()
+        print(equation)
+        print('  drift: {:.4f} arcsec / h'.format(popt[0]))
+        if len(popt) > 3:
+            print('  period: {:.4f} s'.format(popt[3]*3600))
     plt.legend()
     plt.savefig(os.path.join(args.output_path, 'translation_fit.pdf'))
 
