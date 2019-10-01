@@ -7,7 +7,7 @@ Outils pour l’analyse des données de la coupole d’Orsay.
 Cloner (ou télécharger les sources) de ce dépôt, et l’installer avec pip :
 
 ~~~
-git clone https://github.com/gpelouze/castor
+git clone https://github.com/coupole-orsay/castor
 cd castor
 pip install .
 ~~~
