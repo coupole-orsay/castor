@@ -9,7 +9,7 @@ Cloner (ou télécharger les sources) de ce dépôt, et l’installer avec pip :
 ~~~
 git clone https://github.com/gpelouze/castor
 cd castor
-pip install .
+pip3 install . --user
 ~~~
 
 ## Licence
