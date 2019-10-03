@@ -11,7 +11,8 @@ entry_points = {
         'castor_exoplanet_analysis = castor._console_scripts.exoplanet_analysis:main',
         'castor_pointing_analysis = castor._console_scripts.pointing_analysis:main',
         'castor_prepare = castor._console_scripts.prepare:main',
-        'castor_prepare_spectra = castor._console_scripts.prepare_spectra:main',
+        'castor_rotate_spectra = castor._console_scripts.rotate_spectra:main',
+        'castor_wavelength_calibration = castor._console_scripts.wavelength_calibration:main',
         ]
     }
 

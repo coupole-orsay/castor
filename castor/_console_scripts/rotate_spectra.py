@@ -15,15 +15,11 @@ def get_parsed_args():
     parser.add_argument(
         'target_name', type=str,
         help='Name of the target')
+    # FIXME: --spectrum-rotation not used
     parser.add_argument(
         '--spectrum-rotation', type=float,
         help=('Rotation angle of the spectrum, in degrees. '
               'Determined automatically if not specified.'))
-    parser.add_argument(
-        '--grating-period', type=int,
-        help=('Period of the grating, in lines/mm. '
-              'If not specified, --calib-points must be specified.'
-            ))
     parser.add_argument(
         '--calib-points', type=str,
         help=('2-columns text file containing indices and wavelength of '
@@ -55,15 +51,10 @@ def get_parsed_args():
     if not args.sci_cube:
         args.sci_cube = os.path.join(args.target_name, 'cube_prepared.fits')
 
-    got_grating_period = (args.grating_period is not None)
-    got_calib_points = (args.calib_points is not None)
-    if not (got_grating_period or got_calib_points):
-        parser.error('either --grating-period or --calib-points  are required')
-
     # output filenames
-    args.sci_cube_r = os.path.join(args.target_name, 'cube_prepared_r.fits')
+    args.sci_cube_rotated = os.path.join(args.target_name, 'cube_prepared_rotated.fits')
     args.master_calib = os.path.join(args.target_name, 'master_calib.fits')
-    args.master_calib_r = os.path.join(args.target_name, 'master_calib_r.fits')
+    args.master_calib_rotated = os.path.join(args.target_name, 'master_calib_rotatedotated.fits')
 
     return args
 
@@ -72,36 +63,60 @@ def main():
 
     if not args.overwrite:
         output_files = (
-            args.sci_cube_r,
+            args.sci_cube_rotated,
             args.master_calib,
-            args.master_calib_r,
+            args.master_calib_rotated,
             )
         for output_file in output_files:
             if os.path.exists(output_file):
                 msg = "output file '{}' exists, use -O to overwrite outputs"
                 raise OSError(msg.format(output_file))
 
-    master_calib = preparation.create_master(args.calib_path)
+    # make master calib -------------------------------------------------------
+
+    # FIXME:
+    master_calib = files_handling.open_or_compute(
+        args.master_calib,
+        preparation.create_master,
+        args.calib_path,
+        )
+    print(master_calib.shape)
+
     # TODO: reduce size of master_calib to speed up RT
     # maybe this:
     import papy.num
     master_calib_small = papy.num.rebin(master_calib, (4, 4), cut_to_bin=True)
     # end TODO
     angle = spectroscopy.find_spectrum_orientation(master_calib_small)
-    master_calib_r = sndi.rotate(master_calib, - angle)
+    master_calib_rotated = sndi.rotate(master_calib, - angle)
     files_handling.save_fits(
-        master_calib, args.master_calib, overwrite=args.overwrite)
-    files_handling.save_fits(
-        master_calib_r, args.master_calib_r, overwrite=args.overwrite)
+        master_calib_rotated, args.master_calib_rotated, overwrite=args.overwrite)
 
     sci_cube_hdulist = fits.open(args.sci_cube)
     sci_cube = sci_cube_hdulist[args.hdu].data
 
-    sci_cube_r = sndi.rotate(sci_cube, - angle, axes=(1, 2))
+    sci_cube_rotated = sndi.rotate(sci_cube, - angle, axes=(1, 2))
 
-    sci_cube_hdulist[args.hdu].data = sci_cube_r
-    sci_cube_hdulist.writeto(args.sci_cube_r, overwrite=args.overwrite)
+    sci_cube_hdulist[args.hdu].data = sci_cube_rotated
+    sci_cube_hdulist.writeto(args.sci_cube_rotated, overwrite=args.overwrite)
 
 
 if __name__ == '__main__':
     main()
+
+    # # temporary test plots
+    # # img = fits.open('spec2d.fits')[0].data
+    # img = fits.open('cal_200ms_077.fit')[0].data
+    # img = papy.num.rebin(img, (4, 4), cut_to_bin=True)
+# 
+    # angle = find_spectrum_orientation(img)
+    # print(angle)
+# 
+    # rot_img = sndi.rotate(img, - angle)
+# 
+    # # -----------------------------------
+    # import matplotlib as mpl
+    # import matplotlib.pyplot as plt
+# 
+    # plt.figure(4, clear=True)
+    # plt.imshow(rot_img)
