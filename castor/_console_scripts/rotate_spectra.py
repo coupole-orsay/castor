@@ -15,9 +15,9 @@ def get_parsed_args():
     parser.add_argument(
         'target_name', type=str,
         help='Name of the target')
-    # FIXME: --spectrum-rotation not used
     parser.add_argument(
         '--spectrum-rotation', type=float,
+        default=None,
         help=('Rotation angle of the spectrum, in degrees. '
               'Determined automatically if not specified.'))
     parser.add_argument(
@@ -80,14 +80,22 @@ def main():
         preparation.create_master,
         args.calib_path,
         )
-    print(master_calib.shape)
 
-    # TODO: reduce size of master_calib to speed up RT
-    # maybe this:
-    import papy.num
-    master_calib_small = papy.num.rebin(master_calib, (4, 4), cut_to_bin=True)
-    # end TODO
-    angle = spectroscopy.find_spectrum_orientation(master_calib_small)
+    # set or find spectrum rotation angle -------------------------------------
+    if args.spectrum_rotation is not None:
+        angle = args.spectrum_rotation
+        print('Using provided spectrum rotation: {:.2f}°'.format(angle))
+    else:
+        # TODO: reduce size of master_calib to speed up RT
+        # maybe this:
+        import papy.num
+        master_calib_small = papy.num.rebin(master_calib, (4, 4), cut_to_bin=True)
+        # end TODO
+        angle = spectroscopy.find_spectrum_orientation(master_calib_small)
+        print('Using computed spectrum rotation: {:.2f}°'.format(angle))
+
+    # rotate calib and science spectra ----------------------------------------
+
     master_calib_rotated = sndi.rotate(master_calib, - angle)
     files_handling.save_fits(
         master_calib_rotated, args.master_calib_rotated, overwrite=args.overwrite)
