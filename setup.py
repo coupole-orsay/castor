@@ -21,14 +21,14 @@ package_data = {
     }
 
 setuptools.setup(
-    name='castor',
+    name='castor-orsay',
     version='2019.10.8',
     author='Gabriel Pelouze',
     author_email='gabriel.pelouze@ias.u-psud.fr',
     description='Codes pour l’ASTronomie à ORsay',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/gpelouze/castor',
+    url='https://github.com/coupole-orsay/castor',
     packages=setuptools.find_packages(),
     entry_points=entry_points,
     package_data=package_data,
