@@ -4,6 +4,13 @@ Outils pour l’analyse des données de la coupole d’Orsay.
 
 ## Installation
 
+### Option 1 : depuis PyPI (recommandé)
+
+Exécuter `pip3 install castor-orsay --user`.
+
+
+### Option 2 : depuis git (version de développement)
+
 Cloner (ou télécharger les sources) de ce dépôt, et l’installer avec pip :
 
 ~~~
