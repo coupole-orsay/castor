@@ -22,7 +22,7 @@ package_data = {
 
 setuptools.setup(
     name='castor',
-    version='2019.08.08',
+    version='2019.10.8',
     author='Gabriel Pelouze',
     author_email='gabriel.pelouze@ias.u-psud.fr',
     description='Codes pour l’ASTronomie à ORsay',
