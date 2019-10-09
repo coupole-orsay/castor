@@ -2,6 +2,7 @@
 
 import numpy as np
 import skimage.transform as skt
+from scipy.optimize import curve_fit
 
 def find_spectrum_orientation(spectrum, angle_step=.25):
     ''' Determine the orientation of a 2D spectrum
@@ -36,3 +37,31 @@ def find_spectrum_orientation(spectrum, angle_step=.25):
     # maximum of the RT gives the orientation of the lines.
     angle = angles[np.argmax(spectrum_rt_max)]
     return angle
+
+def calib_wavelength_array(calib_pts, Nlam):
+    '''Generate a array of the pixel index - wavelength correspondence,
+    from an linear fit of some (pixel_index, associated wavelenth) tuple.
+
+    Parameters
+    ==========
+    calib_pts : 2D ndarray
+        A 2D array containing the pixel index and the associated
+        wavelength (at least 2 calibration points are required).
+    Nlam : int
+        The total number of pixels along the wavelength axis.
+
+    Returns
+    =======
+    calib_array : 2D ndarray
+        A 2D array containing for each pixel along the wavelength axis
+        the assoicated wavelength.
+    '''
+    # Initialization
+    px_array = np.arange(Nlam)
+    # Linear fitting
+    f_lin = lambda x, a, b : a*x + b
+    a, b = curve_fit(f_lin, calib_pts[:,0], calib_pts[:,1])[0]
+    lam_array = a * px_array + b
+    # Output
+    calib_array = np.array([px_array, lam_array]).T
+    return calib_array
