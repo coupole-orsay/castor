@@ -21,12 +21,6 @@ def get_parsed_args():
         help=('Rotation angle of the spectrum, in degrees. '
               'Determined automatically if not specified.'))
     parser.add_argument(
-        '--calib-points', type=str,
-        help=('2-columns text file containing indices and wavelength of '
-              'at least two wavelength calibration points. '
-              'If not specified, --grating-period must be passed.'
-            ))
-    parser.add_argument(
         '--sci-cube', type=str,
         help=('Science data prepared with castor_prepare.'
               ' Default: {target_name}/cube_prepared.fits'))
@@ -50,11 +44,13 @@ def get_parsed_args():
         args.calib_path = os.path.join(args.target_name, 'calib')
     if not args.sci_cube:
         args.sci_cube = os.path.join(args.target_name, 'cube_prepared.fits')
+    if not args.output_path:
+        args.output_path = args.target_name
 
     # output filenames
-    args.sci_cube_rotated = os.path.join(args.target_name, 'cube_prepared_rotated.fits')
     args.master_calib = os.path.join(args.target_name, 'master_calib.fits')
-    args.master_calib_rotated = os.path.join(args.target_name, 'master_calib_rotatedotated.fits')
+    args.master_calib_rotated = os.path.join(args.target_name, 'master_calib_rotated.fits')
+    args.sci_cube_rotated = os.path.join(args.target_name, 'cube_prepared_rotated.fits')
 
     return args
 
@@ -64,7 +60,6 @@ def main():
     if not args.overwrite:
         output_files = (
             args.sci_cube_rotated,
-            args.master_calib,
             args.master_calib_rotated,
             )
         for output_file in output_files:
