@@ -28,9 +28,16 @@ def find_spectrum_orientation(spectrum, angle_step=.25):
         (Rotating `spectrum` by `- angle` would return an array where axis 0 is
         the position along the slit, and axis 1 the wavelength dimension.)
     '''
+
+    # TODO: reduce size of master_calib to speed up RT
+    # maybe this:
+    import papy.num
+    spectrum_small = papy.num.rebin(spectrum, (4, 4), cut_to_bin=True)
+    # end TODO
+
     angles = np.arange(0, 180, angle_step)
     # Radon transform: axis 0: displacement; axis1: angle
-    spectrum_rt = skt.radon(spectrum, angles, circle=False)
+    spectrum_rt = skt.radon(spectrum_small, angles, circle=False)
     # maximum of the RT across all displacements:
     spectrum_rt_max = np.max(spectrum_rt, axis=0)
     # for a spectrum compose dof straight emission lines, the global

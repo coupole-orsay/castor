@@ -80,12 +80,7 @@ def main():
         angle = args.spectrum_rotation
         print('Using provided spectrum rotation: {:.2f}°'.format(angle))
     else:
-        # TODO: reduce size of master_calib to speed up RT
-        # maybe this:
-        import papy.num
-        master_calib_small = papy.num.rebin(master_calib, (4, 4), cut_to_bin=True)
-        # end TODO
-        angle = spectroscopy.find_spectrum_orientation(master_calib_small)
+        angle = spectroscopy.find_spectrum_orientation(master_calib)
         print('Using computed spectrum rotation: {:.2f}°'.format(angle))
 
     # rotate calib and science spectra ----------------------------------------
