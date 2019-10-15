@@ -22,7 +22,7 @@ package_data = {
 
 setuptools.setup(
     name='castor-orsay',
-    version='2019.10.15',
+    version='2019.10.15.1',
     author='Gabriel Pelouze, Aurélien Stcherbinine',
     author_email='gabriel.pelouze@ias.u-psud.fr, aurelien.stcherbinine@ias.u-psud.fr',
     description='Codes pour l’ASTronomie à ORsay',
