@@ -100,20 +100,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-    # # temporary test plots
-    # # img = fits.open('spec2d.fits')[0].data
-    # img = fits.open('cal_200ms_077.fit')[0].data
-    # img = papy.num.rebin(img, (4, 4), cut_to_bin=True)
-# 
-    # angle = find_spectrum_orientation(img)
-    # print(angle)
-# 
-    # rot_img = sndi.rotate(img, - angle)
-# 
-    # # -----------------------------------
-    # import matplotlib as mpl
-    # import matplotlib.pyplot as plt
-# 
-    # plt.figure(4, clear=True)
-    # plt.imshow(rot_img)
