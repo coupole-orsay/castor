@@ -22,7 +22,7 @@ package_data = {
 
 setuptools.setup(
     name='castor-orsay',
-    version='2019.10.10',
+    version='2019.10.15',
     author=(
         'Gabriel Pelouze <gabriel.pelouze@ias.u-psud.fr>'
         'Aurélien Stcherbinine <aurelien.stcherbinine@ias.u-psud.fr>'
