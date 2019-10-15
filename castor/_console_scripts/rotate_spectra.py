@@ -73,12 +73,11 @@ def main():
                 raise OSError(msg.format(output_file))
 
     # make master calib -------------------------------------------------------
-
-    # FIXME:
-    master_calib = files_handling.open_or_compute(
+    master_calib, _ = files_handling.open_or_compute(
         args.master_calib,
         preparation.create_master,
         args.calib_path,
+        use_timestamps=False,
         )
 
     # set or find spectrum rotation angle -------------------------------------
