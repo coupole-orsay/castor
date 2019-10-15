@@ -73,14 +73,51 @@ def compute_and_save(filename, function, *args, overwrite=False, **kwargs):
     data, timestamps = function(*args, **kwargs)
     save_fits(data, filename, timestamps=timestamps, overwrite=overwrite)
 
-def open_or_compute(filename, function, *args, save=True, **kwargs):
+def open_or_compute(filename, function, *args,
+                    save=True, use_timestamps=True, **kwargs):
     ''' If filename exists, open it; if it doesn't, compute it using
-    function(*args, **kwargs) and save it to filename. '''
-    try:
-        data, timestamps = load_fits_data(filename,
-            norm_to_exptime=False, timestamps_hdu=1)
-    except FileNotFoundError:
-        data, timestamps = function(*args, **kwargs)
+    function(*args, **kwargs) and save it to filename.
+
+    Parameters
+    ==========
+    filename : str
+        FITS to open if it exists, or where to save the computed data
+        if `save=True` is passed
+    function : callable
+        Callable which accepts *args and **kwargs, and returns either
+        `data`, or `data, timestamps`
+    save : bool (default: True)
+        Whether to save the computed data.
+    use_timestamps : bool (default: True)
+        If True, assume that `function` returns timestamps.
+    *args, **kwargs :
+        Passed to `function`
+
+    Returns
+    =======
+    data : ndarray
+        The loaded or computed data
+    timestamps : ndarray or None
+        The timestamps computed or loaded from the FITS.
+        None if `use_timestamps=False`.
+    '''
+    timestamps = None
+    if use_timestamps:
+        timestamps_hdu = 1
+    else:
+        timestamps_hdu = None
+    if os.path.exists(filename):
+        data = load_fits_data(
+            filename,
+            norm_to_exptime=False,
+            timestamps_hdu=timestamps_hdu,
+            )
+        if use_timestamps:
+            data, timestamps = data
+    else:
+        data = function(*args, **kwargs)
+        if use_timestamps:
+            data, timestamps = data
         if save:
             try:
                 save_fits(data, filename, timestamps=timestamps)
