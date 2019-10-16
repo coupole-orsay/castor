@@ -2,8 +2,10 @@
 
 import numpy as np
 import scipy.interpolate as sinterp
+from scipy.signal import fftconvolve
 import skimage.transform as skt
 from scipy.optimize import curve_fit
+from tqdm import tqdm
 
 def resize_for_radon(spectrum, min_size=150):
     ''' Resize 2D spectrum to speed up skt.radon
@@ -81,7 +83,7 @@ def find_spectrum_orientation(spectrum, angle_step=.25):
     return angle
 
 def calib_wavelength_array(calib_pts, Nlam):
-    '''Generate a array of the pixel index - wavelength correspondence,
+    '''Generate an array of the pixel index - wavelength correspondence,
     from an linear fit of some (pixel_index, associated wavelenth) tuple.
 
     Parameters
@@ -107,3 +109,71 @@ def calib_wavelength_array(calib_pts, Nlam):
     # Output
     calib_array = np.array([px_array, lam_array]).T
     return calib_array
+
+def cross_correlation(img1, img2):
+    '''Determine the shift along the x and y axis between the two input
+    2D images, using a 2D FFT convolution.
+
+    Parameters
+    ==========
+    img1 : 2D ndarray
+        The reference 2D spectrum.
+    img2 : 2D ndarray
+        The 2D spectrum to align
+
+    Returns
+    =======
+    x_dith : int
+        The shift along the x-axis in pixels.
+    y_dith : int
+        The shift along the y-axis in pixels.
+    '''
+    ysize, xsize = img1.shape
+    corr = fftconvolve(img1, img2[::-1, ::-1], mode='same')
+    y_dith, x_dith = np.where(corr == np.max(corr))
+    x_dith = int(x_dith) - xsize//2
+    y_dith = int(y_dith) - ysize//2
+    return x_dith, y_dith
+
+def align_images(Img, img_ref=0, xaxis=True, yaxis=True):
+    '''Align a series of image relatively to the img_ref,
+    along the x and y-axis.
+
+    Parmeters
+    =========
+    Img : 3D ndarray
+        The array of 2D spectra (images) to align.
+    img_ref : int (default: 0)
+        The index of the image taken as a reference.
+    xaxis : bool (default: True)
+        Enable x-axis alignment.
+    yaxis : bool (default: True)
+        Enable y-axis alignment.
+
+    Returns
+    =======
+    Img_align : 3D ndarray
+        The aligned array of 2D spectra.
+    '''
+    # Shift determination using FFT convolution
+    ref = Img[img_ref]
+    N, Ysize, Xsize = Img.shape
+    x_dith, y_dith = np.zeros(N, dtype=int), np.zeros(N, dtype=int)
+    for i in tqdm(range(N)):
+        x_dith[i], y_dith[i] = cross_correlation(ref, Img[i])
+    if not xaxis:
+        x_dith[:] = 0
+    if not yaxis:
+        y_dith[:] = 0
+    # Creation of a new set of images, with new dimensions
+    x0 = np.max(np.abs(x_dith))
+    y0 = np.max(np.abs(y_dith))
+    Xnew = Xsize + 2*x0
+    Ynew = Ysize + 2*y0
+    Img_align = np.zeros((N, Ynew, Xnew))
+    # Alignement
+    for i in range(N):
+        Img_align[i, y0+y_dith[i]:y0+Ysize+y_dith[i], x0+x_dith[i]:x0+Xsize+x_dith[i]] = Img[i]
+    # Output
+    return Img_align
+
