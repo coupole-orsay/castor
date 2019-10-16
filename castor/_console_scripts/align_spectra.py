@@ -33,7 +33,7 @@ def get_parsed_args():
     if not args.sci_cube_rotated:
         args.sci_cube_rotated = os.path.join(args.target_name, 'cube_prepared_rotated.fits')
     if not args.output:
-        args.output = os.path.join(args.target_name, 'cube_prepared_rotated_aligned.txt')
+        args.output = os.path.join(args.target_name, 'cube_prepared_rotated_aligned.fits')
 
     return args
 
