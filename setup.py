@@ -13,6 +13,7 @@ entry_points = {
         'castor_prepare = castor._console_scripts.prepare:main',
         'castor_rotate_spectra = castor._console_scripts.rotate_spectra:main',
         'castor_wavelength_calibration = castor._console_scripts.wavelength_calibration:main',
+        'castor_align_spectra = castor._console_scripts.align_spectra:main',
         ]
     }
 
@@ -22,7 +23,7 @@ package_data = {
 
 setuptools.setup(
     name='castor-orsay',
-    version='2019.10.16',
+    version='2019.10.16.1',
     author='Gabriel Pelouze, Aurélien Stcherbinine',
     author_email='gabriel.pelouze@ias.u-psud.fr, aurelien.stcherbinine@ias.u-psud.fr',
     description='Codes pour l’ASTronomie à ORsay',
