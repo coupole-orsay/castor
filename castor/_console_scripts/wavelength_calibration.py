@@ -8,7 +8,7 @@ from castor import spectroscopy
 
 def get_parsed_args():
     parser = argparse.ArgumentParser(
-        description='Prepare a series of images.',
+        description='Compute the wavelength calibration.',
         )
     parser.add_argument(
         'target_name', type=str,
@@ -21,7 +21,7 @@ def get_parsed_args():
               'and the corresponding wavelength. '
               'Default: {name}/wavelength_calib_points.txt'))
     parser.add_argument(
-        '--start-index', type=int,
+        '--start-index', type=int, default=0,
         help=('1st index of the wavelength array. '
               'Must be 0 or 1. Default: 0'))
     parser.add_argument(
@@ -43,8 +43,6 @@ def get_parsed_args():
         args.master_calib_rotated = os.path.join(args.target_name, 'master_calib_rotated.fits')
     if not args.output:
         args.output = os.path.join(args.target_name, 'wavelength_array.txt')
-    if not args.start_index:
-        args.start_index = 0
 
     return args
 
