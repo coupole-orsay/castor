@@ -6,6 +6,7 @@ from scipy.signal import fftconvolve
 import skimage.transform as skt
 from scipy.optimize import curve_fit
 from tqdm import tqdm
+from copy import deepcopy
 
 def resize_for_radon(spectrum, min_size=150):
     ''' Resize 2D spectrum to speed up skt.radon
@@ -135,7 +136,8 @@ def cross_correlation(img1, img2):
     y_dith = int(y_dith) - ysize//2
     return x_dith, y_dith
 
-def align_images(Img, img_ref=0, xaxis=True, yaxis=True):
+def align_images(Img, img_ref=0, xaxis=True, yaxis=True, 
+                 gauss=True, sigma=0.5):
     '''Align a series of image relatively to the img_ref,
     along the x and y-axis.
 
@@ -149,18 +151,30 @@ def align_images(Img, img_ref=0, xaxis=True, yaxis=True):
         Enable x-axis alignment.
     yaxis : bool (default: True)
         Enable y-axis alignment.
+    gauss : bool (default: True)
+        If True, the images are convolve with a 2D gaussian
+        to reduce the effects of sharpy edges.
+    sigma : float (default : 0.5)
+        If gauss=True, the standard deviation of the use gaussian.
 
     Returns
     =======
     Img_align : 3D ndarray
         The aligned array of 2D spectra.
     '''
-    # Shift determination using FFT convolution
-    ref = Img[img_ref]
     N, Ysize, Xsize = Img.shape
+    Img2 = deepcopy(Img)
+    # Gaussian convolution
+    if gauss:
+        X, Y = np.linspace(-1, 1, Xsize), np.linspace(-1, 1, Ysize)
+        G = gauss2d(X, Y, 1, 0, 0, sigma, sigma)
+        for i in range(N):
+            Img2 *= G
+    # Shift determination using FFT convolution
+    ref = Img2[img_ref]
     x_dith, y_dith = np.zeros(N, dtype=int), np.zeros(N, dtype=int)
     for i in tqdm(range(N)):
-        x_dith[i], y_dith[i] = cross_correlation(ref, Img[i])
+        x_dith[i], y_dith[i] = cross_correlation(ref, Img2[i])
     if not xaxis:
         x_dith[:] = 0
     if not yaxis:
@@ -177,3 +191,34 @@ def align_images(Img, img_ref=0, xaxis=True, yaxis=True):
     # Output
     return Img_align
 
+def gauss2d(x, y, a, x0, y0, sigmax, sigmay):
+    '''Compute a 2D gaussian on a grid generated from the
+    input x and y arrays.
+
+    G = a * exp( -(x-x0)**2/(2*sigmax**2) - (y-y0)**2/(2*sigmay**2) )
+
+    Parameters
+    ==========
+    x : 1D ndarray
+        The x-axis values.
+    y : 1D ndarray
+        The y-axis values.
+    a : float
+        The amplitude of the gaussian.
+    x0 : float
+        The x-coordinate of the gaussian center.
+    y0 : float
+        The y-coordinate of the gaussian center.
+    sigmax : float
+        The standard deviation along the x-axis.
+    sigmay : float
+        The standard deviation along the y-axis.
+
+    Returns
+    =======
+    G : 2D ndarray
+        The 2D gaussian computed of the (x, y) grid.
+    '''
+    X, Y = np.meshgrid(x, y)
+    G = a * np.exp( -(X-x0)**2/(2*sigmax**2) - (Y-y0)**2/(2*sigmay**2) )
+    return G
