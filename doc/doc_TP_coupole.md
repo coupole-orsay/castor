@@ -37,7 +37,6 @@ Puis installer le module python `castor-orsay` dans votre répertoire :
 $ pip3 install castor-orsay --user
 ~~~
 
-\pagebreak
 Se déconnecter ensuite de la session ssh en tapant :
 
 ~~~bash
