@@ -1,16 +1,3 @@
----
-title: Codes pour l'ASTronomie à ORsay
-subtitle: Installation et utilisation
-thanks: <https://pypi.org/project/castor-orsay/>
-date: Novembre 2019
-shortauthor: A. Stcherbinine & G. Pelouze
-author:
-    - Aurélien Stcherbinine (<aurelien.stcherbinine@ias.u-psud.fr>)
-    - Gabriel Pelouze (<gabriel.pelouze@ias.u-psud.fr>)
-mainlang: french
-toc: False
-...
-
 # Installation de CASTOR sur les sessions UPSud
 En raison des restrictions utilisateurs sur les machines du département, il nous
 est impossible d'installer le module via `pip` (même en local).
