@@ -172,7 +172,8 @@ L'ordre d'appel des différentes fonctions doit donc être respecté.
 1. `castor_exoplanet_analysis [options] target_name`
 
 
-## Ouverture des cubes finaux en Python
+## Lecture des données en Python
+### Ouverture des cubes finaux
 ~~~python
 from astropy.io import fits
 f = fits.open('cube_prepared.fits')
@@ -182,5 +183,14 @@ data = hdu.data # tableau contenant les données
 header = hdu.header # dictionnaire contenant l’en-tête
 ~~~
 
+### Lecture du fichier texte d'étalonnage
+~~~python
+import numpy as np
+px, wvl = np.loadtxt('wavelength_array.txt', unpack=True)
+# Importation des deux colonnes du fichier texte en deux tableaux distincts
+~~~
+
+ * `px` : les indices de chaque pixel de l'image le long de l'axe spectral
+ * `wvl` : les longueurs d'ondes associées
 
 **Note :** Pour plus d'informations sur l'utilisation de Python, voir *tuto_python_astro.pdf* par G. Pelouze.
