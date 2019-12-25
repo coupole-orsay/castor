@@ -2,6 +2,12 @@
 
 Outils pour l’analyse des données de la coupole d’Orsay.
 
+## Documentation
+
+[Documentation pour les TP à la coupole (PDF)][doc-tp-pdf]
+
+[doc-tp-pdf]: https://github.com/coupole-orsay/castor/releases/latest/download/doc_TP_coupole.pdf
+
 ## Installation
 
 ### Option 1 : depuis PyPI (recommandé)
