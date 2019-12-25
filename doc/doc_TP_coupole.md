@@ -1,3 +1,47 @@
+---
+title: Codes pour l'ASTronomie à ORsay
+subtitle: Installation et utilisation
+thanks: <https://pypi.org/project/castor-orsay/>
+date: Novembre 2019
+shortauthor: A. Stcherbinine & G. Pelouze
+author:
+    - Aurélien Stcherbinine (<aurelien.stcherbinine@ias.u-psud.fr>)
+    - Gabriel Pelouze (<gabriel.pelouze@ias.u-psud.fr>)
+
+lang: fr
+toc: False
+numbersections: true
+toc-depth: 2
+papersize: a4
+geometry:
+    - top=30mm
+    - bottom=32mm
+    - left=20mm
+    - right=30mm
+linkcolor: blue
+urlcolor: blue
+toccolor: blue
+header-includes: |
+    \usepackage[mono=false]{libertine}
+
+    \let\oldtableofcontents\tableofcontents
+    \renewcommand{\tableofcontents}{\oldtableofcontents\clearpage}
+
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{1ex}
+    \renewcommand{\labelitemi}{–}
+
+    \usepackage{fancyhdr}
+    \usepackage{titling}
+    \fancyhead{}
+    \fancyhead[c]{\textit{A. Stcherbinine \& G. Pelouze :} \thetitle}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \pagestyle{fancy}
+
+    \usepackage[linecolor=lightgray,linewidth=1pt,skipabove=12pt,skipbelow=15pt]{mdframed}
+    \surroundwithmdframed{Shaded}
+...
+
 # Installation de CASTOR sur les sessions UPSud
 En raison des restrictions utilisateurs sur les machines du département, il nous
 est impossible d'installer le module via `pip` (même en local).
