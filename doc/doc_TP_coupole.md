@@ -42,7 +42,7 @@ header-includes: |
     \surroundwithmdframed{Shaded}
 ...
 
-# Installation de CASTOR sur les sessions UPSud
+# Installation de CASTOR sur les sessions UPSaclay
 En raison des restrictions utilisateurs sur les machines du département, il nous
 est impossible d'installer le module via `pip` (même en local).
 Toutefois, il s'avère que cette commande est autorisée dans les sessions émulées
@@ -52,7 +52,7 @@ le module en local.
 
 ## Identifiants
 Ce manuel vise à détailler l'installation et l'utilisation du module `castor-orsay` sur les
-machines des salles informatiques du bâtiment 625 ($\hbar$) de l'Université Paris-Sud.
+machines des salles informatiques du bâtiment 625 ($\hbar$) de l'Université Paris-Saclay.
 Vos identifiants de connexion aux postes sont rappelés ci-dessous (à condition de posséder un 
 compte Adonis de l'Université Paris-Saclay).
 
@@ -237,4 +237,4 @@ px, wvl = np.loadtxt('wavelength_array.txt', unpack=True)
  * `px` : les indices de chaque pixel de l'image le long de l'axe spectral
  * `wvl` : les longueurs d'ondes associées
 
-**Note :** Pour plus d'informations sur l'utilisation de Python, voir *tuto_python_astro.pdf* par G. Pelouze.
+**Note :** Pour plus d'informations sur l'utilisation de Python, voir [*tuto_python_astro.pdf*](https://github.com/gpelouze/tuto_python_astro/releases/latest/download/tuto_python_astro.pdf) par G. Pelouze.
