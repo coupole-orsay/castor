@@ -92,14 +92,21 @@ $ exit
 Le module `castor-orsay` est désormais installé dans votre répertoire `/home`
 (option `--user` de `pip3`), mais il faut maintenant indiquer à python où aller le chercher.
 
-Pour cela, ajouter la ligne suivante aux fichiers `.bashrc` (pour une session locale) 
-et `.bash_profile` (pour une connexion en ssh) :
+Pour cela, ouvrir les fichiers `.bashrc` et `.bash_profile` (si le fichier n'existe pas, le créer) via :
+
+~~~bash
+$ gedit .bashrc .bash_profile &
+~~~
+
+Puis, ajouter la ligne suivante à la fin de chacun d'entre eux.
 
 ~~~bash
 export PATH=$PATH:$HOME/.local/bin
 ~~~
 
-Si le fichier `.bash_profile` n'existe pas, le créer.
+Recharger enfin le fichier `.bashrc` (via la commande `source ~/.bashrc`) ou relancer un terminal.
+
+**Bravo vous avez installé CASTOR !**
 
 **Note :** Les fichiers `.bashrc` et `.bash_profile` sont des fichiers cachés
 situés dans votre `/home`. 
@@ -108,16 +115,6 @@ Vous pouvez les afficher via la commande :
 ~~~bash
 $ ls -a
 ~~~
-
-Le plus simple pour les éditer est donc de taper dans le terminal :
-
-~~~bash
-$ gedit .bashrc .bash_profile &
-~~~
-
-Recharger enfin le fichier `.bashrc` (`$ source ~/.bashrc`) ou relancer un terminal.
-
-**Bravo vous avez installé CASTOR !**
 
 
 # Utilisation
@@ -209,7 +206,7 @@ L'ordre d'appel des différentes fonctions doit donc être respecté.
 ### Spectroscopie
 1. `castor_prepare [options] target_name`
 2. `castor_rotate_spectra [options] target_name`
-3. `castor_align_spectra [options] target_name` **(Pour un objet ponctuel uniquement !)**
+3. `castor_align_spectra [options] target_name` **(Pas pour la Lune !)**
 4. `castor_wavelength_calibration [options] target_name`
 
 ### Transit d'exoplanète
