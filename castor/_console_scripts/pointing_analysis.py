@@ -143,7 +143,7 @@ def main():
         linestyle='',
         )
     ref_date = timestamps[0]
-    x_label = 'Time since {} [h]'.format(ref_date.isoformat(timespec='seconds'))
+    x_label = 'Time since {} [h]'.format(ref_date.strftime('%Y-%m-%d %H:%M:%S'))
     rel_time = [(ts - ref_date).total_seconds() for ts in timestamps]
     rel_time = np.array(rel_time) / 3600
 
