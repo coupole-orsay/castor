@@ -2,7 +2,7 @@
 title: Codes pour l'ASTronomie à ORsay
 subtitle: Installation et utilisation
 thanks: <https://pypi.org/project/castor-orsay/>
-date: Novembre 2019
+date: Septembre 2021
 shortauthor: A. Stcherbinine & G. Pelouze
 author:
     - Aurélien Stcherbinine (<aurelien.stcherbinine@ias.u-psud.fr>)
@@ -66,13 +66,13 @@ Ouvrir un terminal et se connecter en ssh à sa session en tapant (remplacer *lo
 personnel) :
 
 ~~~bash
-$ ssh login@tp-ssh1.dep-informatique.u-psud.fr
+$ ssh login@ssh1.pgip.universite-paris-saclay.fr
 ~~~
 
 ou
 
 ~~~bash
-$ ssh login@tp-ssh2.dep-informatique.u-psud.fr
+$ ssh login@ssh2.pgip.universite-paris-saclay.fr
 ~~~
 
 Puis installer le module python `castor-orsay` dans votre répertoire :
