@@ -235,3 +235,41 @@ px, wvl = np.loadtxt('wavelength_array.txt', unpack=True)
  * `wvl` : les longueurs d'ondes associées
 
 **Note :** Pour plus d'informations sur l'utilisation de Python, voir [*tuto_python_astro.pdf*](https://github.com/gpelouze/tuto_python_astro/releases/latest/download/tuto_python_astro.pdf) par G. Pelouze.
+
+
+<!-- Documentation de cette documentation
+
+Ce document a pour vocation à être converti en PDF. Le document est converti
+par pandoc en passant par xelatex. À chaque fois qu’un nouveau tag est pushé
+sur le repo, une action Github est déclanchée. Cette action (configurée dans
+`.github./workflows/main.yml`) compile le PDF, puis l’enregistre avec la
+release associée au tag. Le README (première page du repo) contient un lien
+vers la dernière version du PDF.
+
+La compilation du PDF est effectuée par `.github/workflows/entrypoint.sh`,
+appelé par l’action Github. L’action échoue s’il y a un problème de
+compilation, et il faut résoudre le problème (sinon le PDF accessible depuis le
+README n’est pas à jour!). Il y a deux options:
+
+1. Bidouiller `doc_TP_coupole.md` ou `entrypoint.sh`, commiter, faire un tag
+   temporaire, puis pusher. Ça déclenche les actions Github, donc la
+   compilation du PDF. Puis recommencer jusqu’à ce que le problème soit résolu…
+   Je recommande très peu cette méthode, car elle génère plein de tags (et donc
+   de releases) inutiles, sur Github ET sur PyPI. En plus, vous perdez pas mal
+   de temps à commiter, tagger, pusher, et attendre le déclenchement de
+   l’action.
+
+2. Exécuter Docker en local, de sorte à faire *exactement* ce que fait Github,
+   mais sans les étapes commit/tag/push/attente. Il suffit d’exécuter en local
+   depuis la racine du repo:
+
+   sudo docker run --volume "$(pwd):/data" --user $(id -u):$(id -g) --entrypoint "/data/.github/workflows/entrypoint.sh" pandoc/latex:2.9
+
+   Les erreurs de compilation s’affichent dans le terminal. Le PDF généré (s’il
+   y en a un) est dans `doc/doc_TP_coupole.pdf`. (Et le dossier `texmfhome`
+   peut être supprimé après la compilation.)
+
+   Une fois que la compilation se passe bien, commiter, tagger, et pusher pour
+   générer et enregistrer le PDF sur Github.
+
+-->
