@@ -10,20 +10,35 @@ Outils pour l’analyse des données de la coupole d’Orsay.
 
 ## Installation
 
-### Option 1 : depuis PyPI (recommandé)
+### Version stable (depuis PyPI; recommandé)
 
-Exécuter `pip3 install castor-orsay --user`.
+```bash
+mkdir castor && cd castor
+python3 -m venv venv
+source venv/bin/activate
+pip3 install castor-orsay
+```
 
 
-### Option 2 : depuis git (version de développement)
+### Version de développement (depuis GitHub)
 
-Cloner (ou télécharger les sources) de ce dépôt, et l’installer avec pip :
-
-~~~
+```bash
 git clone https://github.com/coupole-orsay/castor
 cd castor
-pip3 install . --user
-~~~
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -e .
+```
+
+
+## Utilisation
+
+```bash
+cd castor
+source venv/bin/activate
+castor_<tab>
+```
+
 
 ## Licence
 
