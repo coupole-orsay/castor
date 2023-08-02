@@ -159,30 +159,39 @@ class Source():
         self.color_active = color_active
         self.color_inactive = color_inactive
 
+        self._circles_are_plotted = False
+
         self.circ = plt.Circle(
-            (None, None), self.radius,
+            (0, 0), self.radius,
             fill=False, color=self.color_inactive)
-        self.parent.im_ax.add_patch(self.circ)
 
         if self.annulus_radii is not None:
             inner_radius, outer_radius = self.annulus_radii
             inner_circ = plt.Circle(
-                (None, None), inner_radius,
+                (0, 0), inner_radius,
                 fill=False, color=self.color_inactive)
             outer_circ = plt.Circle(
-                (None, None), outer_radius,
+                (0, 0), outer_radius,
                 fill=False, color=self.color_inactive)
-            self.parent.im_ax.add_patch(inner_circ)
-            self.parent.im_ax.add_patch(outer_circ)
             self.annulus_circs = (inner_circ, outer_circ)
         else:
             self.annulus_circs = None
+
+    def _plot_circles_if_needed(self):
+        if not self._circles_are_plotted:
+            self.parent.im_ax.add_patch(self.circ)
+            if self.annulus_circs is not None:
+                for circ in self.annulus_circs:
+                    self.parent.im_ax.add_patch(circ)
+                    self.parent.im_ax.add_patch(circ)
+            self._circles_are_plotted = True
 
     def set_coordinates(self, x, y):
         self.circ.center = x, y
         if self.annulus_circs is not None:
             for circ in self.annulus_circs:
                 circ.center = x, y
+        self._plot_circles_if_needed()
         self.parent.fig.canvas.draw()
 
     def get_coordinates(self):
