@@ -1,7 +1,7 @@
 python-dateutil==2.8.2
 numpy==1.25.2
 matplotlib==3.7.2
-astropy==5.3.1
+astropy==5.3.3
 tqdm==4.65.0
 astroalign==2.4.2
 sep==1.2.1
